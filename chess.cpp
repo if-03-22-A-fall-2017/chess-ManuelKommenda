@@ -19,13 +19,20 @@ bool is_square_ok (File file, Rank rank){
   return file == 8 && rank == 8;
 }
 int nr (Rank rank){
-  return 1;
+  return rank;
 }
 int nf (File file){
-  return 1;
+  return file;
 }
 bool is_move_from_base_line (enum PieceColor color, Rank rank){
-  return false;
+  if (color == White && rank != 2) {
+    return false;
+  }
+  else if(color == White && rank != 7){
+    return false;
+  }
+
+  return true;
 }
 bool is_piece (struct ChessPiece pc, enum PieceColor color, enum PieceType type){
   return pc.color == color && pc.type == type;
@@ -71,6 +78,7 @@ struct ChessPiece get_piece (ChessBoard chess_board, File file, Rank rank){
   return chess_board[rank - 1][file - 'a'].piece;
 }
 void setup_chess_board (ChessBoard chess_board){
+  init_chess_board(chess_board);
   struct ChessPiece white_king = {White, King};
   struct ChessPiece white_queen = {White, Queen};
   struct ChessPiece white_rook = {White, Rook};
@@ -123,7 +131,7 @@ bool remove_piece (ChessBoard chess_board, File file, Rank rank){
   return is_possible;
 }
 bool squares_share_file (File s1_f, Rank s1_r, File s2_f, Rank s2_r){
-  return s1_f == s2_f && s1_f >= 'a' && s1_f<= 'h' && s1_r < 9&& s1_r> 0&& s2_f >= 'a' && s2_f<= 'h' && s2_r < 9&& s2_r> 0;
+  return s1_f == s2_f && s1_f >= 'a' && s1_f<= 'h' && s1_r < 9 && s1_r> 0 && s2_f >= 'a' && s2_f<= 'h' && s2_r < 9 && s2_r> 0;
 }
 bool squares_share_rank (File s1_f, Rank s1_r, File s2_f, Rank s2_r){
   return s1_r == s2_r && s1_f >= 'a' && s1_f<= 'h' && s1_r < 9&& s1_r> 0&& s2_f >= 'a' && s2_f<= 'h' && s2_r < 9&& s2_r> 0;
@@ -143,7 +151,10 @@ bool squares_share_diagonal (File s1_f, Rank s1_r, File s2_f, Rank s2_r){
     return false;
 }
 bool squares_share_knights_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r){
-  return true;
+  if (s1_r - s2_r != 0 && s1_f - s2_f != 0 && -2 <= s1_r - s2_r &&  s1_r - s2_r <= 2 && -2 <= s1_f - s2_f && s1_f - s2_f<= 2){
+    return true;
+  }
+  return false;
 }
 bool squares_share_pawns_move (enum PieceColor color, enum MoveType move, File s1_f, Rank s1_r, File s2_f, Rank s2_r){
   if (color == White) {
@@ -167,8 +178,15 @@ bool squares_share_pawns_move (enum PieceColor color, enum MoveType move, File s
   return true;
 }
 bool squares_share_queens_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r){
-  return true;
+  if (squares_share_file (s1_f, s1_r, s2_f, s2_r) || squares_share_rank (s1_f, s1_r, s2_f, s2_r) || squares_share_diagonal (s1_f, s1_r, s2_f,  s2_r)) {
+    return true;
+  }
+  return false;
 }
 bool squares_share_kings_move (File s1_f, Rank s1_r, File s2_f, Rank s2_r){
-  return true;
+  if (-1 <= s1_f - s2_f && s1_f - s2_f <= 1 && -1 <= s1_r - s2_r && s1_r - s2_r<= 1) {
+    return true;
+  }
+
+  return false;
 }

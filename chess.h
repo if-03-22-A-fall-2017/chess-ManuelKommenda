@@ -1,10 +1,10 @@
 /*----------------------------------------------------------
- *				HTBLA-Leonding / Klasse: 2AHIF
+ *				HTBLA-Leonding / Klasse: 2AHDV
  * ---------------------------------------------------------
  * Exercise Number: 0
  * Title:			chess.h
- * Author:			Manuel Kommenda
- * Due Date:		
+ * Author:			P. Bauer
+ * Due Date:		October 15, 2014
  * ----------------------------------------------------------
  * Description:
  * Basic chess functions.
